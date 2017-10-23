@@ -17,7 +17,7 @@ public class ArgParser {
 
 
     private void parseArgs() {
-
+        //Parsen von Argumenten
         StringBuffer sb = null;
                                
         for ( int i = 0; i < args.length; i++ ) {

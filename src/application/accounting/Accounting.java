@@ -1,7 +1,6 @@
 package application.accounting;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class Accounting{
     
@@ -18,13 +17,17 @@ public class Accounting{
         return aus;
     }
     
-    public static void main(String[] argv){
+    public static void main(String[] argv) throws FileNotFoundException, IOException{
         List<Depositor>deps = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
+        String dateiname = sc.nextLine();
+        double zinssatz = sc.nextDouble();
+        sc.close();
+        BufferedReader bf = new BufferedReader(new FileReader(dateiname));
+        String zeile;
         
         //datei einlesen
-        while(sc.hasNextLine()) {
-            String zeile = sc.nextLine();
+        while((zeile=bf.readLine()) != null) {
             char s = zeile.charAt(0);
             if(s == '#'){
                 continue;
@@ -36,6 +39,8 @@ public class Accounting{
                 String vorname = eintrag[2];
                 
                 String[] gut = eintrag[3].split(",");
+                
+                
                 if(gut[1].length() ==1){
                     gut[1] += "0";
                 }
@@ -60,10 +65,9 @@ public class Accounting{
             }
         }
         
-        Depositor.setzeZinsen(0.05);
-        
+        Depositor.setzeZinsen(zinssatz);
         for(int k=0; k < deps.size(); k++){
-            System.out.println(deps.get(k).getNummer() +";" +deps.get(k).getNachname() +";" + deps.get(k).getVorname() +";" +Kommadarstellung(deps.get(k).berechneGuthaben()));
+            System.out.println(deps.get(k).getNummer() +";" +deps.get(k).getNachname() +";" + deps.get(k).getVorname() +";"+Kommadarstellung(deps.get(k).berechneGuthaben()));
         }
     }
 }
