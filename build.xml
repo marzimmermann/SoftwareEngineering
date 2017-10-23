@@ -8,9 +8,25 @@
   </target>
 
   <target name="compile" depends="init">
-    <javac includeAntRuntime="false" srcdir="src" destdir="build/classes"/>
+    <javac  includeantruntime="false" srcdir="src" destdir="build/classes">
+        <include name="**/application/**"/>
+        <include name="**/testcases/*.java"/>
+        <exclude name="**/data/**"/>
+    </javac>
   </target>
-
+  
+  <target name="execute" depends="compile">
+    <java classpath="build/classes"
+            classname="application.accounting.Accounting">
+    </java>
+  </target>
+          
+  <target name="execute-jar" depends="archive">
+    <java classpath="dist/accounting.jar"
+            classname="application.accounting.Accounting">
+    </java>
+  </target>
+  
   <target name="archive" depends="compile">
     <jar destfile="dist/accounting.jar"
         basedir="build/classes"/>
