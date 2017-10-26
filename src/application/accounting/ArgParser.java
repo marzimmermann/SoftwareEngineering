@@ -35,7 +35,8 @@ public class ArgParser {
             else if ( args[i].equals("-i") || args[i].equals("--input-file") ) {
 
                 if ( i + 1 < args.length ) {
-                    inputFilename = args[++i];
+                    //inputFilename = args[++i];
+                    
                 } // end of if ( i + 1 < args.length )
                 else {
                     throw new IllegalArgumentException("missing filename");

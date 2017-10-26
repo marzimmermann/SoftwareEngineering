@@ -17,12 +17,26 @@ public class Accounting{
         return aus;
     }
     
-    public static void main(String[] argv) throws FileNotFoundException, IOException{
+    public static void main(String[] args) throws FileNotFoundException, IOException{
         List<Depositor>deps = new ArrayList<>();
-        Scanner sc = new Scanner(System.in);
-        String dateiname = sc.nextLine();
-        double zinssatz = sc.nextDouble();
-        sc.close();
+        String dateiname;
+        double zinssatz;
+        
+        //ohne ArgParser
+        if(args.length == 0){
+            Scanner sc = new Scanner(System.in);
+            dateiname = sc.nextLine();
+            zinssatz = sc.nextDouble();
+            sc.close();
+        }
+        //mit Argparser
+        else{
+            ArgParser argParser = new ArgParser(args);
+            dateiname = argParser.getInputFilename();
+            String output = argParser.getOutputFilename();
+            zinssatz = Double.parseDouble(argParser.getNonOptions());
+        }
+        
         BufferedReader bf = new BufferedReader(new FileReader(dateiname));
         String zeile;
         

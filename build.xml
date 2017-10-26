@@ -32,10 +32,10 @@
   
   <target name="execute-argparser" depends="compile">
     <java classpath="build/classes"
-            classname="application.accounting.Accounting">
+            classname="application.accounting.ArgParser">
         <arg line="--input-file ./src/data/test.in
-             -o ./src/data/test.csv.new
-             -1 ./src7data/test.csv.log 0,75"/>
+                   -o ./src/data/test.csv.new
+                   -l ./src7data/test.csv.log 0,75"/>
     </java>
   </target>
   
@@ -44,7 +44,7 @@
             classname="application.accounting.Accounting">
         <arg line="--input-file ./src/data/test.in
              -o ./src/data/test.csv.new
-             -1 ./src7data/test.csv.log 0,75"/>
+             -l ./src7data/test.csv.log 0,75"/>
     </java>
   </target>
   
