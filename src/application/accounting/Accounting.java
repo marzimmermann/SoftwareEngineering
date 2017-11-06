@@ -19,8 +19,8 @@ public class Accounting{
     
     public static void main(String[] args) throws FileNotFoundException, IOException{
         List<Depositor>deps = new ArrayList<>();
-        String dateiname;
-        double zinssatz;
+        String dateiname=null, output=null;
+        double zinssatz=0;
         
         //ohne ArgParser
         if(args.length == 0){
@@ -31,10 +31,11 @@ public class Accounting{
         }
         //mit Argparser
         else{
-            ArgParser argParser = new ArgParser(args);
-            dateiname = argParser.getInputFilename();
-            String output = argParser.getOutputFilename();
-            zinssatz = Double.parseDouble(argParser.getNonOptions());
+            ArgParser ap = new ArgParser(args);
+            dateiname = ap.getInputFilename();
+            output = ap.getOutputFilename();
+            zinssatz = Double.parseDouble(ap.getNonOptions());
+            System.setOut(new PrintStream(new FileOutputStream(output)));
         }
         
         BufferedReader bf = new BufferedReader(new FileReader(dateiname));
