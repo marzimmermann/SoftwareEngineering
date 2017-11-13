@@ -4,12 +4,19 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.*;
 import java.io.*;
 
 public class Accounting{
     //Logger
     private static final Logger logger = Logger.getLogger(Accounting.class.getName());
+    
+    //Resource Bundle
+    String baseName = "Accounting";
+    ResourceBundle rb = ResourceBundle.getBundle(baseName);
     
     public static String Kommadarstellung(double betrag){
         String betr = String.valueOf(betrag);
@@ -71,7 +78,8 @@ public class Accounting{
         try{
             BufferedReader bf = new BufferedReader(new FileReader(dateiname));
             String zeile;
-            logger.info("lese von Datei: " + dateiname);
+            String readinput_msg = rb.getString("readinput_msg");
+            logger.info(readinput_msg + ": " + dateiname);
             
             while((zeile=bf.readLine()) != null) {
                 logger.info("gelesene Zeile: " + zeile);
