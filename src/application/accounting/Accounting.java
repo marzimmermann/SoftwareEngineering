@@ -15,8 +15,8 @@ public class Accounting{
     private static final Logger logger = Logger.getLogger(Accounting.class.getName());
     
     //Resource Bundle
-    String baseName = "Accounting";
-    ResourceBundle rb = ResourceBundle.getBundle(baseName);
+    private static String baseName = "Accounting";
+    private static ResourceBundle rb = ResourceBundle.getBundle(baseName);
     
     public static String Kommadarstellung(double betrag){
         String betr = String.valueOf(betrag);
@@ -50,7 +50,9 @@ public class Accounting{
             log = ap.getLogFilename();
             output = ap.getOutputFilename();
             zinssatz = Double.parseDouble(ap.getNonOptions());
-            System.setOut(new PrintStream(new FileOutputStream(output)));
+            if(output != null){
+                System.setOut(new PrintStream(new FileOutputStream(output)));
+            }
         }
         
         //Logger wird aktiviert
@@ -67,7 +69,7 @@ public class Accounting{
                 }
             });
             logger.addHandler(fh);
-            logger.setLevel(Level.WARNING);
+            logger.setLevel(Level.ALL);
         }
         catch(IOException e){
             logger.severe("Datei kann nicht geschrieben werden");
