@@ -2,6 +2,14 @@
 
 <project name="accounting" default="archive">
 
+    <property name="build" value="./build/classes"/>
+    <property name="dist" value="./dist"/>
+    
+    <path id="project.class.path">
+        <pathelement path="${build}"/>
+        <pathelement path="${dist}/data/lang"/>
+    </path>
+    
   <target name="init">
     <mkdir dir="build/classes"/>
     <mkdir dir="dist"/>
@@ -12,13 +20,13 @@
   </target>
   
   <target name="execute" depends="compile">
-    <java classpath="build/classes"
+    <java classpathref="project.class.path"
             classname="application.accounting.Accounting">
     </java>
   </target>
   
   <target name="execute-jar" depends="archive">
-    <java classpath="dist/accounting.jar"
+    <java classpathref="project.class.path" classpath="dist/accounting.jar"
             classname="application.accounting.Accounting">
     </java>
   </target>
@@ -40,7 +48,7 @@
   </target>
   
   <target name="execute-params" depends="compile">
-    <java classpath="build/classes"
+    <java classpathref="project.class.path"
             classname="application.accounting.Accounting">
         <arg line="--input-file ./src/data/test.in
                    -o ./src/data/test.csv.new

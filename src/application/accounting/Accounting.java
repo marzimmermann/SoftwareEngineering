@@ -33,7 +33,7 @@ public class Accounting{
     
     public static void main(String[] args) throws FileNotFoundException, IOException{
         List<Depositor>deps = new ArrayList<>();
-        String dateiname=null, output=null, log=null;
+        String dateiname=null, output=null, log="";
         double zinssatz=0;
         
         //ohne ArgParser
@@ -56,6 +56,7 @@ public class Accounting{
         }
         
         //Logger wird aktiviert
+        if(log !=null && log.length() >0){
         try{
             boolean append =true;
             FileHandler fh = new FileHandler(log, append);
@@ -75,7 +76,7 @@ public class Accounting{
             logger.severe("Datei kann nicht geschrieben werden");
             e.printStackTrace();
         }
-        
+        }
         //datei einlesen
         try{
             BufferedReader bf = new BufferedReader(new FileReader(dateiname));
