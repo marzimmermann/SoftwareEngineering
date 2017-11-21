@@ -98,7 +98,7 @@
   <!-- remove the link if it is not done yet -->
   <target name="delete-language-links"
           depends="test-remove-language-links" if="isAdir" >
-      <exec executable="ln"
+      <exec executable="rm"
             error="/dev/null" os="Linux">
           <arg file="./dist/data/lang" />
       </exec>

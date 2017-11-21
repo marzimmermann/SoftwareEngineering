@@ -7,6 +7,9 @@ import java.util.logging.Level;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 import java.io.*;
 
@@ -32,6 +35,17 @@ public class Accounting{
     }
     
     public static void main(String[] args) throws FileNotFoundException, IOException{
+        File file = new File("./dist/data/lang");
+        rb = null;
+        try{
+            URL[] urls = {file.toURI().toURL()};
+            ClassLoader loader = new URLClassLoader(urls);
+            rb = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        
         List<Depositor>deps = new ArrayList<>();
         String dateiname=null, output=null, log="";
         double zinssatz=0;
