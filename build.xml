@@ -120,7 +120,7 @@
                 # For example, set the com.xyz.foo logger to only log SEVERE
                 # messages:
                 com.xyz.foo.level = SEVERE
-      </echo>
+            </echo>
       
       <java classpathref="project.class.path" 
           classpath="build/classes"
@@ -129,6 +129,24 @@
             fork="true">
           <jvmarg value="-Djava.util.logging.config.file=./build/classes/accounting_logging.properties"/>
       </java>
+  </target>
+  
+  <target name="execute-errors" depends="archive">
+      <echo file="./build/classes/errors.sh" append="false">
+          #!/bin/bash
+          for I in {00..02}
+          do
+           sh execute_jar.sh -i ./src/data/test_err_$I.in 0.75 &gt; ./src/data/test_err_$I.out
+          done
+      </echo>
+      
+      <exec executable="bash">
+          <arg file="./build/classes/errors.sh"/>
+      </exec>
+      
+      <exec executable="rm">
+          <arg file="./build/classes/errors.sh" />
+      </exec>
   </target>
   
   <target name="create-dirs" depends="init"> 

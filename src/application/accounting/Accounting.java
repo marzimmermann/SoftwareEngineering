@@ -21,6 +21,13 @@ public class Accounting{
     private static String baseName = "Accounting";
     private static ResourceBundle rb = ResourceBundle.getBundle(baseName);
     
+    private static void beende(String msg){
+        logger.warning(msg);
+        System.out.println("Ausfuehrung beendet (siehe Logdatei): ");
+        System.out.println(msg);
+        System.exit(1);
+    }
+    
     public static String Kommadarstellung(double betrag){
         String betr = String.valueOf(betrag);
         String aus = "";
@@ -53,6 +60,7 @@ public class Accounting{
         //ohne ArgParser
         if(args.length == 0){
             Scanner sc = new Scanner(System.in);
+            System.out.println("Warte auf args");
             dateiname = sc.nextLine();
             zinssatz = sc.nextDouble();
             sc.close();
@@ -104,41 +112,62 @@ public class Accounting{
                 if(s == '#'){
                     continue;
                 }
-                else if(s == '0' || s == '1' || s == '2' || s == '3' || s == '4' || s == '5' || s == '6' || s == '7' || s == '8' || s == '9'){ //Zeile mit Information
-                    String[]eintrag = zeile.split(";");
-                    String nummer = eintrag[0];
-                    String nachname = eintrag[1];
-                    String vorname = eintrag[2];
-                    
-                    String[] gut = eintrag[3].split(",");
-                    
-                    
-                    if(gut[1].length() ==1){
-                        gut[1] += "0";
-                    }
-                    String guth = gut[0]+gut[1];
-                    long startguthaben = Long.parseLong(guth) *100;
-                    
-                    List<AccountingEntry> einzahlungen = new ArrayList<>();
-                    for(int i=4; i< eintrag.length; i++){
-                        int tag = Integer.parseInt(eintrag[i]);
-                        i++;
-                        String[] bet = eintrag[i].split(",");
-                        if(bet[1].length() ==1){
-                            bet[1] += "0";
+                    if(s == '0' || s == '1' || s == '2' || s == '3' || s == '4' || s == '5' || s == '6' || s == '7' || s == '8' || s == '9'){ //Zeile mit Information
+                        String[]eintrag = zeile.split(";");
+                        String nummer = eintrag[0];
+                        String nachname = eintrag[1];
+                        String vorname = eintrag[2];
+                        
+                        if(nummer.length() == 0){
+                            beende("Fehlerhafte Id");
                         }
-                        String betr = bet[0]+bet[1];
-                        long betrag = Long.parseLong(betr) *100;
-                        AccountingEntry tmp = new AccountingEntry(tag, betrag);
-                        einzahlungen.add(tmp);
+                        
+                        if(nachname.length() == 0 || vorname.length() == 0){
+                            beende("Fehler beim Namen");
+                        }
+                        
+                        String[] gut = eintrag[3].split(",");
+                        
+                        
+                        if(gut[1].length() ==1){
+                            gut[1] += "0";
+                        }
+                        String guth = gut[0]+gut[1];
+                        long startguthaben;
+                        try{
+                            startguthaben = Long.parseLong(guth) *100;
+                        }catch(NumberFormatException n){
+                            logger.warning("Fehler beim Parsen des Startguthabens");
+                            throw n;
+                        }
+                        
+                        List<AccountingEntry> einzahlungen = new ArrayList<>();
+                        for(int i=4; i< eintrag.length; i++){
+                            int tag = Integer.parseInt(eintrag[i]);
+                            i++;
+                            String[] bet = eintrag[i].split(",");
+                            if(bet[1].length() ==1){
+                                bet[1] += "0";
+                            }
+                            String betr = bet[0]+bet[1];
+                            long betrag;
+                            try{
+                                betrag = Long.parseLong(betr) *100;
+                            }catch(NumberFormatException f){
+                                logger.warning("Fehler beim Parsen des Guthabens");
+                                throw f;
+                            }
+                            AccountingEntry tmp = new AccountingEntry(tag, betrag);
+                            einzahlungen.add(tmp);
+                        }
+                        Depositor d = new Depositor(nummer, nachname, vorname, startguthaben, einzahlungen);
+                        deps.add(d);
                     }
-                    Depositor d = new Depositor(nummer, nachname, vorname, startguthaben, einzahlungen);
-                    deps.add(d);
-                }
+                
             }
         }
         catch (IOException e){
-            logger.warning("IOException");
+            logger.warning("Ein-/Ausgabefehler (Datei " +dateiname +" )");
             throw e;
         }
         
