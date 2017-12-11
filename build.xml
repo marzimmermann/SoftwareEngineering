@@ -9,25 +9,39 @@
         <pathelement path="${build}"/>
         <pathelement path="${dist}/data/lang"/>
     </path>
-   
+
+    
+<!--Dokumentation-->
+    
+    <target name="help" description="Zeigt die Hilfestellung an (fuehre dazu &quot;ant-e  help&quot; aus)">
+        <echo>
+Die Langbeschreibung der Ziele dieses Projekts:
+- Auswertung der Konten eines Sparvereins
+- Eingabe der Daten in Form von CSV-Dateien
+- Ausgabe der Daten in Form zusammengefasster CSV-Dateien
+- Moeglichkeit zum Erstellen einer zugehoerigen Log-Dateien
+- Beschreibung der einzelnen Targets mit &quot;ant -projecthelp&quot;
+
+Das Projekt &quot;accounting&quot; zeigt verschiedene Schritte und Taetigkeiten,
+die bei der Durchfuehrung eines Projekts durchzufuehren sind.
+        </echo>
+    </target>
 <!--erstellen--> 
     
-  <target name="init">
+  <target name="init" description="Initialisiert die Verzeichnisstruktur">
     <mkdir dir="build/classes"/>
     <mkdir dir="dist"/>
+    <mkdir dir="build/classes/package/de"/>
+    <mkdir dir="dist/data"/>
   </target>
 
-  <target name="compile" depends="create-language-links">
+  <target name="compile" depends="create-language-links" description="Kompiliert das Java-Programm">
     <javac  includeAntRuntime="false" srcdir="src" destdir="build/classes" debug="true" debuglevel="lines,vars,source"/>
   </target>
   
-  <target name="create-dirs" depends="init"> 
-          <mkdir dir="build/classes/package/de"/>
-          <mkdir dir="dist/data"/>
-  </target>
   
-  <target name="test-set-language-links"
-          depends="create-dirs">
+  
+  <target name="test-set-language-links" depends="init" description="Ueberprueft, ob die Links zu den Lokalisierungsdateien existieren">
       <condition property="isNotALangDir">
           <not>
               <available file="./dist/data/lang"
@@ -36,8 +50,7 @@
       </condition>
   </target>
   
-  <target name="create-language-links"
-          depends="test-set-language-links" if="isNotALangDir">
+  <target name="create-language-links" depends="test-set-language-links" if="isNotALangDir" description="Erstellt die Links zu den Lokalisierungsdateien">
       <exec executable="ln"
             error="/dev/null" os="Linux">
           <arg line="-sn" />
@@ -46,33 +59,33 @@
       </exec>
   </target>
   
-  <target name="archive" depends="compile">
+  <target name="archive" depends="compile" description="Erstellt das Projektarchiv">
     <jar destfile="dist/accounting.jar"
         basedir="build/classes"/>
   </target>
   
   <!--ausfuehren-->
   
-  <target name="execute" depends="compile">
+  <target name="execute" depends="compile" description="Fuehrt das Programm ohne bereitgestellte Informationen aus">
     <java
             classname="application.accounting.Accounting">
     </java>
   </target>
   
-  <target name="execute-jar" depends="archive">
+  <target name="execute-jar" depends="archive" description="Fuehrt das Archiv aus">
     <java classpathref="project.class.path" classpath="dist/accounting.jar"
             classname="application.accounting.Accounting">
     </java>
   </target>
   
-  <target name="execute-input" depends="compile">
+  <target name="execute-input" depends="compile" description="Fuehrt das Programm mit bereitgestellter Eingabe aus">
     <java classpath="build/classes"
             classname="application.accounting.Accounting"
           input="./accounting.in">
     </java>
   </target>
   
-  <target name="execute-argparser" depends="compile">
+  <target name="execute-argparser" depends="compile" description="Fuehrt den ArgParser aus">
     <java classpath="build/classes"
             classname="application.accounting.ArgParser">
         <arg line="--input-file ./src/data/test.in
@@ -81,7 +94,7 @@
     </java>
   </target>
   
-  <target name="execute-params" depends="compile">
+  <target name="execute-params" depends="compile" description="Fuehrt das Programm mit Parametern und Eingabe aus">
     <java classpathref="project.class.path"
             classname="application.accounting.Accounting">
         <arg line="--input-file ./src/data/test.in
@@ -90,9 +103,7 @@
     </java>
   </target>
   
-  <target name="execute-logging"
-          description="executes the application with a given logging level"
-          depends="compile">
+  <target name="execute-logging" depends="compile" description="Fuehrt das Programm mit einem bestimmten LoggingLevel aus">
       <echo file="./build/classes/accounting_logging.properties" 
             append="false">
                 handlers= java.util.logging.ConsoleHandler
@@ -118,7 +129,7 @@
       </java>
   </target>
   
-  <target name="execute-errors" depends="archive">
+  <target name="execute-errors" depends="archive" description="Fuehrt das Programm mit allen Testfaellen aus">
       <echo file="./build/classes/errors.sh" append="false">
           #!/bin/bash
           for I in {00..02}
@@ -137,19 +148,18 @@
   </target>
   
   <!--aufraumen-->
-  <target name="clean" depends="delete-language-links">
+  <target name="clean" depends="delete-language-links" description="Loescht die Verzeichnisstruktur">
       <delete dir="build"/>
       <delete dir="dist"/>
   </target>
   
-  <target name="test-remove-language-links">
+  <target name="test-remove-language-links" description="Ueberprueft, ob die Links zu den Lokalisierungsdateien existieren">
       <condition property="isADir">
           <available file="./dist/data/lang" type="dir" />
       </condition>
   </target>
   
-  <target name="delete-language-links"
-          depends="test-remove-language-links" if="isAdir" >
+  <target name="delete-language-links" depends="test-remove-language-links" if="isAdir" description="Loescht die Links zu den Lokalisierungsdateien" >
       <exec executable="rm"
             error="/dev/null" os="Linux">
           <arg file="./dist/data/lang" />
