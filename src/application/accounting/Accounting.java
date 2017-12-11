@@ -3,6 +3,7 @@ import java.util.*;
 import java.io.*;
 
 public class Accounting{
+    public String applicationVersion = "Id: <FILE>, version <COMMITHASHABBREVIATED> of <COMMITTERDATEISO8601> by <AUTHORNAME>";
     
     public static String Kommadarstellung(double betrag){
         String betr = String.valueOf(betrag);
