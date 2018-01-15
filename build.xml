@@ -8,7 +8,7 @@
   </target>
 
   <target name="compile" depends="init">
-    <javac  includeAntRuntime="false" srcdir="src" destdir="build/classes" debug="true" debuglevel="lines,vars,source"/>
+    <javac includeAntRuntime="false" srcdir="src" destdir="build/classes" debug="true" debuglevel="lines,vars,source"/>
   </target>
   
   <target name="execute" depends="compile">
@@ -31,20 +31,22 @@
   </target>
   
   <target name="execute-argparser" depends="compile">
-    <java classpath="build/classes"
+    <java classpath="build/classes:/home/se110409/lib/java/java-getopt/java-getopt-1.0.14.jar"
             classname="application.accounting.ArgParser">
         <arg line="--input-file ./src/data/test.in
                    -o ./src/data/test.csv.new
-                   -l ./src/data/test.csv.log 0.75"/>
+                   -l ./src/data/test.csv.log 
+                    -r 0.75"/>
     </java>
   </target>
   
   <target name="execute-params" depends="compile">
-    <java classpath="build/classes"
+    <java classpath="build/classes:/home/se110409/lib/java/java-getopt/java-getopt-1.0.14.jar"
             classname="application.accounting.Accounting">
         <arg line="--input-file ./src/data/test.in
                    -o ./src/data/test.csv.new
-                   -l ./src/data/test.csv.log 0.75"/>
+                   -l ./src/data/test.csv.log 
+                   -r 0.75"/>
     </java>
   </target>
   

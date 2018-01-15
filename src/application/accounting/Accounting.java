@@ -36,7 +36,7 @@ public class Accounting{
             dateiname = ap.getInputFilename();
             output = ap.getOutputFilename();
             zinssatz = Double.parseDouble(ap.getNonOptions());
-            System.setOut(new PrintStream(new FileOutputStream(output)));
+            //System.setOut(new PrintStream(new FileOutputStream(output)));
         }
         
         BufferedReader bf = new BufferedReader(new FileReader(dateiname));
