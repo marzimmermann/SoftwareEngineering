@@ -1,9 +1,10 @@
 package application.accounting;
 import java.util.*;
 import java.io.*;
+import java.math.BigDecimal;
 
 public class Accounting{
-    public String applicationVersion = "Id: <FILE>, version <COMMITHASHABBREVIATED> of <COMMITTERDATEISO8601> by <AUTHORNAME>";
+    public String applicationVersion = "Id: Accounting.java, version 862c397 of 2017-12-04 16:27:51 +0100 by se110409";
     
     public static String Kommadarstellung(double betrag){
         String betr = String.valueOf(betrag);
@@ -21,13 +22,13 @@ public class Accounting{
     public static void main(String[] args) throws FileNotFoundException, IOException{
         List<Depositor>deps = new ArrayList<>();
         String dateiname=null, output=null;
-        double zinssatz=0;
+        BigDecimal zinssatz;
         
         //ohne ArgParser
         if(args.length == 0){
             Scanner sc = new Scanner(System.in);
             dateiname = sc.nextLine();
-            zinssatz = sc.nextDouble();
+            zinssatz =  new BigDecimal( sc.nextLine());
             sc.close();
         }
         //mit Argparser
@@ -35,7 +36,7 @@ public class Accounting{
             ArgParser ap = new ArgParser(args);
             dateiname = ap.getInputFilename();
             output = ap.getOutputFilename();
-            zinssatz = Double.parseDouble(ap.getNonOptions());
+            zinssatz = new BigDecimal (ap.getNonOptions());
             //System.setOut(new PrintStream(new FileOutputStream(output)));
         }
         
@@ -61,7 +62,7 @@ public class Accounting{
                     gut[1] += "0";
                 }
                 String guth = gut[0]+gut[1];
-                long startguthaben = Long.parseLong(guth) *100;
+                BigDecimal startguthaben =  new BigDecimal (guth);
                 
                 List<AccountingEntry> einzahlungen = new ArrayList<>();
                 for(int i=4; i< eintrag.length; i++){
@@ -72,7 +73,7 @@ public class Accounting{
                         bet[1] += "0";
                     }
                     String betr = bet[0]+bet[1];
-                    long betrag = Long.parseLong(betr) *100;
+                    BigDecimal betrag = new BigDecimal (betr);
                     AccountingEntry tmp = new AccountingEntry(tag, betrag);
                     einzahlungen.add(tmp);
                 }
@@ -83,7 +84,7 @@ public class Accounting{
         
         Depositor.setzeZinsen(zinssatz);
         for(int k=0; k < deps.size(); k++){
-            System.out.println(deps.get(k).getNummer() +";" +deps.get(k).getNachname() +";" + deps.get(k).getVorname() +";"+Kommadarstellung(deps.get(k).berechneGuthaben()));
+            System.out.println(deps.get(k).getNummer() +";" +deps.get(k).getNachname() +";" + deps.get(k).getVorname() +";"+deps.get(k).berechneGuthaben());
         }
     }
 }
