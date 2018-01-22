@@ -8,6 +8,7 @@
     <path id="project.class.path">
         <pathelement path="${build}"/>
         <pathelement path="${dist}/data/lang"/>
+        <pathelement path="/home/se110409/lib/java/java-getopt/java-getopt-1.0.14.jar"/>
     </path>
 
     
@@ -73,7 +74,7 @@ die bei der Durchfuehrung eines Projekts durchzufuehren sind.
   </target>
   
   <target name="execute-jar" depends="archive" description="Fuehrt das Archiv aus">
-    <java classpathref="project.class.path" classpath="dist/accounting.jar"
+    <java classpathref="project.class.path" classpath="dist/accounting.jar:/home/se110409/lib/java/java-getopt/java-getopt-1.0.14.jar"
             classname="application.accounting.Accounting">
     </java>
   </target>
@@ -85,21 +86,25 @@ die bei der Durchfuehrung eines Projekts durchzufuehren sind.
     </java>
   </target>
   
-  <target name="execute-argparser" depends="compile" description="Fuehrt den ArgParser aus">
-    <java classpath="build/classes"
+  <target name="execute-argparser" depends="compile">
+    <java classpathref="project.class.path"
+        classpath="build/classes:/home/se110409/lib/java/java-getopt/java-getopt-1.0.14.jar"
             classname="application.accounting.ArgParser">
         <arg line="--input-file ./src/data/test.in
                    -o ./src/data/test.csv.new
-                   -l ./src/data/test.csv.log 0.75"/>
+                   -l ./src/data/test.csv.log 
+                    -r 0.75"/>
     </java>
   </target>
   
-  <target name="execute-params" depends="compile" description="Fuehrt das Programm mit Parametern und Eingabe aus">
+  <target name="execute-params" depends="compile">
     <java classpathref="project.class.path"
+        classpath="build/classes:/home/se110409/lib/java/java-getopt/java-getopt-1.0.14.jar"
             classname="application.accounting.Accounting">
         <arg line="--input-file ./src/data/test.in
                    -o ./src/data/test.csv.new
-                   -l ./src/data/test.csv.log 0.75"/>
+                   -l ./src/data/test.csv.log 
+                   -r 0.05"/>
     </java>
   </target>
   
@@ -134,7 +139,7 @@ die bei der Durchfuehrung eines Projekts durchzufuehren sind.
           #!/bin/bash
           for I in {00..02}
           do
-           sh execute_jar.sh -i ./src/data/test_err_$I.in 0.75 &gt; ./src/data/test_err_$I.out
+           sh execute_jar.sh -i ./src/data/test_err_$I.in -r 0.75 &gt; ./src/data/test_err_$I.out
           done
       </echo>
       
